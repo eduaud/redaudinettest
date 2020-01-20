@@ -1,0 +1,61 @@
+<?php
+
+//motor de base de datos
+	$dbvendor='mysql';
+	
+	
+	$dbhost = "localhost";
+  	$dbname = "nasser_junio15";
+	$dbuser = "root";
+	//$dbpassword = "1958na201";
+	$dbpassword = "SaWeLc2014";
+// para dev X958na2W01SDEV
+	/*$dbhost = "localhost";
+  	$dbname = "nasser_julio_28";
+	$dbuser = "root";
+	$dbpassword = "SaWeLc2005";*/
+	
+	
+	$dbhost = "localhost";
+  	//$dbname = "desarrollo_audicel";
+	//$dbname = "pruebas_cliente_audicel_2";
+	$dbname = "audicel_produccion";
+	$dbuser = "root";
+	//$dbpassword = "que8h36";
+	$dbpassword = 'cr2r7yeYuza';
+		  	
+	
+		  
+	$rooturl = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].'/redaudinetdistribuidor/';
+	
+	define('ES_ADM_SUC', ' AND en_sucursal=1 ');
+    define('ES_ADM_SUC_R', ' AND sys_menus.en_sucursal=1 ');
+	
+	$session_name = 'redaudinetdistribuidor';
+	
+	//Tiempo de sesion en segundos
+	$session_long=  40000*60;
+
+	//ruta del sistema local
+	define('ROOTPATH',  dirname(__FILE__));
+	define('RCSD','/var/www/html/audicel_archivos/certificados_distribuidores/');
+	define('VERCSD','/audicel_archivos/certificados_distribuidores/');
+	
+	//Activar para que sistema estactivado
+	//para la franquicia
+	define('ES_ADM_SUC', '  ');
+	
+	define('INCLUDEPATH', ROOTPATH.'/include/');
+	
+	//ruta de funciones smarty
+	define('SMARTY_DIR', ROOTPATH.'/include/smarty/');
+	//ruta de URL	
+	define('ROOTURL', $rooturl);
+	define('USE_DB_SESSIONS', false);
+	//si no esta definido el acceso lo definimos
+	
+define('ROOTPATHCXP',str_replace('sysaudinetmaster', 'audicel_archivos/cfdicxp/', ROOTPATH));
+        define('ROOTPATHCXPVER',((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].'/audicel_archivos/cfdicxp_dev/');
+
+
+?>

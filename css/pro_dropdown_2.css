@@ -1,0 +1,207 @@
+/* ================================================================ 
+This copyright notice must be kept untouched in the stylesheet at 
+all times.
+
+The original version of this stylesheet and the associated (x)html
+is available at http://www.stunicholls.com/menu/pro_drop_2.html
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+This stylesheet and the associated (x)html may be modified in any 
+way to fit your requirements.
+=================================================================== */
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+.preload1 {background: url(../imagenes/pro_dropdown_2/three_1.gif);}
+
+.preload2 {background: url(../imagenes/pro_dropdown_2/three_1a.gif);}
+
+#nav {
+	padding:0;
+	margin:0;
+	list-style:none;
+	height:38px;
+	background:#fff url(../imagenes/pro_dropdown_2/three_0.gif) repeat-x;
+	position:relative;
+	z-index:500;
+	font-family:arial, verdana, sans-serif;
+	float: left;
+	width: 1024px;
+}
+
+
+#contenido {
+	margin: auto;
+	background-color: #FFFFFF;
+	text-align: left;
+	width: 1024px;
+	overflow: hidden;
+}
+body {
+	background-color: #E9E9E9;
+	margin-top: 0px;
+	text-align: center;
+}
+#nav li.top {
+	display:block;
+	float:left;
+	height:38px;
+}
+
+#nav li a.top_link {
+	display:block;
+	float:left;
+	height:35px;
+	line-height:33px;
+	color:#E0E0E0;
+	text-decoration:none;
+	font-size:11px;
+	/*font-weight:bold;*/
+	cursor:pointer;
+	background: url(../imagenes/pro_dropdown_2/three_0.gif);
+	padding-top: 0px;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 12px;
+}
+
+#nav li a.top_link span {
+float:left; 
+display:block; 
+padding:0 24px 0 12px; 
+height:35px; 
+background: url(../imagenes/pro_dropdown_2/three_0.gif) right top no-repeat;
+}
+
+
+#nav li a.top_link span.down {
+float:left; 
+display:block; 
+padding:0 24px 0 12px; 
+height:35px; 
+background: url(../imagenes/pro_dropdown_2/three_0a.gif) no-repeat right top;
+}
+
+
+
+
+
+#nav li:hover a.top_link {
+color:#fff; 
+background: url(../imagenes/pro_dropdown_2/three_1.gif) no-repeat;
+}
+#nav li:hover a.top_link span {
+background:url(../imagenes/pro_dropdown_2/three_1.gif) no-repeat right top;
+}
+#nav li:hover a.top_link span.down {
+background:url(../imagenes/pro_dropdown_2/three_1a.gif) no-repeat right top;
+}
+
+/* Default list styling */
+
+#nav li:hover {
+position:relative; z-index:200;
+}
+
+#nav li:hover ul.sub{
+	left:1px;
+	top:38px;
+	padding:3px;
+	border:1px solid #FFFFFF;
+	white-space:nowrap;
+	width:200px;
+	height:auto;
+	z-index:300;
+	background-color: #333333;
+	filter:alpha(opacity=90);
+    -moz-opacity:0.9;
+    -khtml-opacity: 0.9;
+	opacity: 0.9;
+}
+
+
+#nav li:hover ul.sub li{
+	display:block;
+	height:20px; 
+	position:relative; 
+	float:left; 
+	width:200px; 
+	font-weight:normal;
+ }
+#nav li:hover ul.sub li a
+{
+	display:block;
+	font-size:11px;
+	height:18px;
+	width:200px;
+	line-height:18px;
+	text-indent:5px;
+	color:#CCCCCC;
+	text-decoration:none;
+}
+
+
+#nav li ul.sub li a.fly
+{
+	background-color: #666666;
+	background-image: url(../imagenes/pro_dropdown_2/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 130px 6px;
+}
+#nav li:hover ul.sub li a:hover {
+	color:#fff;
+	border-color:#fff;
+	background-color: #131313;
+	width: 200px;
+}
+#nav li:hover ul.sub li a.fly:hover
+{
+	color:#fff;
+	background-color: #CC0000;
+	background-image: url(../imagenes/pro_dropdown_2/arrow_over.gif);
+	background-repeat: no-repeat;
+	background-position: 130px 6px;
+}
+
+
+#nav li:hover li:hover ul,
+#nav li:hover li:hover li:hover ul,
+#nav li:hover li:hover li:hover li:hover ul,
+#nav li:hover li:hover li:hover li:hover li:hover ul
+{
+	left:140px;
+	top:-4px;
+	padding:3px;
+	border:1px solid #FFFFFF;
+	white-space:nowrap;
+	width:200px;
+	z-index:400;
+	height:auto;
+	background-color: #333333;
+}
+
+#nav ul, 
+#nav li:hover ul ul,
+#nav li:hover li:hover ul ul,
+#nav li:hover li:hover li:hover ul ul,
+#nav li:hover li:hover li:hover li:hover ul ul
+{
+	position:absolute;
+	left:-9999px;
+	top:-9999px;
+	width:0;
+	height:0;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+#nav li:hover li:hover li a.fly,
+#nav li:hover li:hover li:hover li a.fly,
+#nav li:hover li:hover li:hover li:hover li a.fly
+{
+	background:#bbd37e url(../imagenes/pro_dropdown_2/arrow.gif) 80px 6px no-repeat; 
+	color:#000; 
+	border-color:#990066;
+} 

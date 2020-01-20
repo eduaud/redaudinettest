@@ -1,0 +1,583 @@
+{ include file="_header.tpl" pagetitle="$contentheader" }
+	<h1>{$nombre_menu}</h1>
+    <div id="resultadoEliminar" style="position:absolute; top:20%; left:5%; background:#1D66AD; color:#FFFFFF; display:none; width:300px; height:500px; font-size:12px; padding:5px"></div>
+	<div class="buscador" id="buscador">
+        <form name="forma_filtro" action="#b" method="" onsubmit="return nosubmit();" >
+            <input type="hidden" value="{$cadP1}" name="cadP1" id="cadP1"/>
+            <input type="hidden" value="{$cadP2}" name="cadP2" id="cadP2"/>
+            <input type="hidden" value="{$t}" name="t" id="t"/>
+            <input type="hidden" value="{$rooturl}" name="rooturl" id="rooturl"/>
+			<input type="hidden" value="{$pie_catalogo}" name="pie_catalogo" id="pie_catalogo"/>
+            <input name="stm" type="hidden" value="{$stm}" id="stm"/>
+            <table class="table_datos"  width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+					<td>&nbsp;&nbsp;&nbsp;</td>
+                     <td>
+                        <p>Seleccionar campo:</p>
+                    </td>
+                    <td>
+                        <input name="tcr" type="hidden" value="{$tcr}" />
+                        <select class="campos" name="campo" title="Seleccionar Campo para Filtrar">
+                            {html_options values=$valuesFiltro output=$outputsFiltro}                            
+                        </select>
+                    </td>
+                    <td><p> &nbsp; que &nbsp;</p></td>
+                    <td>
+                        <select class="campos" name="operador" title="Seleccione una Condicion para Filtrar.">
+							<option value="contiene">contiene a...</option>
+                            <option value="=">es igual a(&#61;)</option>
+                            <option value="!=">es diferente de(&ne;)</option>
+                            <option value=">">es mayor que (&gt;)</option>
+                            <option value="<">es menor que (&lt;)</option>
+                            <option value=">=">es mayor o igual que (&ge;)</option>
+                            <option value="<=">es menor o igual que (&le;)</option>
+                            <option value="empieza">empieza con </option>                            
+                        </select>
+                    </td>
+                    <td><p>&nbsp; </p></td>
+                    <td>
+                        <input type="text" name="valor" class="campos" title="Asigne un valor para Filtrar." onkeydown="teclaEnter(event, '{$t}&vpe={$vpe}&npe={$npe}&mpe={$mpe}&epe={$epe}&ipe={$ipe}&gpe={$gpe}', campo.value, operador.value, valor.value,'{$opExtra}','{$rooturl}','{$tcr}', fecdel.value, fecal.value,'{$stm}')"/>
+                    </td>            
+                    {if $t eq ''}
+                    <td>
+                        <span class="campos">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha del&nbsp;</span>
+                        <input type="text" size="9" name="fecdel" id="fecdel" class="campos" onfocus="calendario(this);"/>
+                        <span class="campos">al&nbsp;</span>
+                        <input type="text" size="9" name="fecal" id="fecal" class="campos" onfocus="calendario(this);"/>
+                    </td>
+                    {else}   
+                        <input type="hidden" name="fecdel" />
+                        <input type="hidden" name="fecal" />
+                    {/if}
+                    <td>&nbsp;&nbsp;&nbsp;
+                        <input type="button" name="ac_filtro" value="Filtrar &raquo;" class="button_filter btn_white" onClick="filtro('{$t}&vpe={$vpe}&npe={$npe}&mpe={$mpe}&epe={$epe}&ipe={$ipe}&gpe={$gpe}', campo.value, operador.value, valor.value,'{$opExtra}','{$rooturl}','{$tcr}', fecdel.value, fecal.value,'{$stm}')" title="Filtrar Registros"/>
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;
+                       <input type="button" name="no_filtro" value="Ver todos &raquo;" class="btn_white" onClick="filtro('{$t}&vpe={$vpe}&npe={$npe}&mpe={$mpe}&epe={$epe}&ipe={$ipe}&gpe={$gpe}','viewall',null,null,'{$opExtra}','{$rooturl}','{$tcr}','','','{$stm}')" title="Ver todos los Registros"/>
+                 
+                    </td>
+                </tr>
+            </table>
+        </form>
+	</div>
+	
+<div class="bot-tablaup" id="bot-tablaup">
+	  <!--Tabla base64 {$t}-->	  
+      {if $t eq 'YW5kZXJwX2ZvbGlvcw=='}
+      <!--Validacion para alta de folios solo genera nuevo cuando la serie no exista o este desactivada-->
+         {if $activoserie eq '1'}
+		 <br></script>
+        <a href="../general/encabezados.php?t={$t}&k=&op=1&cadP1={$cadP1}&cadP2={$cadP2}&stm={$stm}" title="Agregar Nuevo Registro">
+			<!-- <img src="{$rooturl}imagenes/general/nuevo-it.jpg" alt="" width="100" height="32" border="0"> -->
+			<input class="button_new" type="button" value="Nuevo">
+		  </a>
+          {/if}
+      {elseif $t eq 'cGV1Z19ib2xldGluZXM=' && $npe neq 0}
+		<br>
+	      <a href="../especiales/addBoletin.php" title="Agregar Nuevo Registro">
+			<!-- <img src="{$rooturl}imagenes/general/nuevo-it.jpg" alt="" width="100" height="32" border="0"> -->
+			<input class="button_new" type="button" value="Nuevo">
+		  </a>
+      {elseif $t eq 'cGV1Z19hdXRvcw==' && $npe neq 0}
+		<br>
+	      <a href="../especiales/autos.php" title="Agregar Nuevo Registro">
+			<!-- <img src="{$rooturl}imagenes/general/nuevo-it.jpg" alt="" width="100" height="32" border="0"> -->
+			<input class="button_new" type="button" value="Nuevo">
+		  </a>    
+	   {elseif $t neq 'YW5kZXJwX2NvbXBhbmlhcw==' &&  $t neq 'YW5kZXJwX2ZhY3R1cmFz' && $t neq 'YW5kZXJwX2N1ZW50YXNfcG9yX2NvYnJhcg==' && $t neq 'bmFfY29zdGVvX3Byb2R1Y3Rvcw==' &&  $npe neq 0 && $t neq 'YWRfbW92aW1pZW50b3NfYWxtYWNlbg==' &&$t neq 'Y2xfY29udHJhcmVjaWJvcw=='&&$t neq 'Y2xfcmFuZ29zX2lyZHM='&&$t neq 'YWRfY29zdGVvX3Byb2R1Y3Rvcw=='}
+		<br>
+		  <a href="../general/encabezados.php?t={$t}&k=&op=1&cadP1={$cadP1}&cadP2={$cadP2}&stm={$stm}&pie={$pie_catalogo}" title="Agregar Nuevo Registro">
+			<!-- <img src="{$rooturl}imagenes/general/nuevo-it.jpg" alt="" width="100" height="32" border="0"> -->
+			<input class="button_new" type="button" value="Nuevo">
+		  </a>
+	  {/if} 
+      <!----excepcion para los almacenes de nasser------>
+      {if ( $t eq 'YWRfbW92aW1pZW50b3NfYWxtYWNlbg=='  && ($stm eq '70003' || $stm eq '70007' || $stm eq '70008' || $stm eq '70004' || $stm eq '70011'  || $stm eq '70011'  || $stm eq '70012'  || $stm eq '70033' || $stm eq '70055' || $stm eq '70066' || $stm eq '70088') ) }
+		<form action="../general/encabezados.php" method="get">
+			<input type="hidden" name="t" value="{$t}">
+			<input type="hidden" name="k" value="">
+			<input type="hidden" name="op" value="1">
+			<input type="hidden" name="cadP1" value="{$cadP1}">
+			<input type="hidden" name="cadP2" value="{$cadP2}">
+			<input type="hidden" name="stm" value="{$stm}">
+			<input type="hidden" name="pie" value="{$pie_catalogo}">
+			<input class="button_new" type="submit" value="Nuevo" name="button">
+		 </form>
+	  {/if} 
+      
+  </div>
+<div class="tabla" id="tabla">  
+
+<table class="table-duo" width="100%" cellspacing="0" cellpadding="0" border="0">
+	    
+    <!-- Codigo Grid de Iv&aacute;n -->
+    <tr>
+    	<td>
+		<div style="width:100%; padding:0; height:500px; overflow: auto;">
+        <div style="height:455px; {if $sumAnchos<1100+206}width:{$sumAnchos}px;{else}width:1100px;{/if} border:0; padding-left:3px; padding-bottom:5px;" id="borde">
+        
+    	<table id="listado" cellpadding="0" cellspacing="0" border="0" Alto="420"
+               conScroll="S" scrollH="S" width="{$sumAnchos+16}px" validaNuevo="false" AltoCelda="25" auxiliar="0" ruta="../../imagenes/general/" validaElimina="false" Datos="datosListados.php?t={$t}&vpe={$vpe}&npe={$npe}&mpe={$mpe}&epe={$epe}&ipe={$ipe}&gpe={$gpe}&stm={$stm}"
+               verFooter="N" guardaEn="False" listado="S" class="tabla_Grid_RC" paginador="S" datosxPag="30" pagMetodo='php' ordenaPHP="S" title="Listado de Registros" estilos_header="{$estiloCssHead}" alto_head="{$altohead}">
+               <!--estilos_header="{$estiloCssHead}" alto_head="{$altohead}" agregado por abc para los encabezados-->
+            <tr class="HeaderCell">
+            	{section loop=$headers name=x}
+                     <!--<input type="text" value="{$valuesEncGrid[x]}  abc  {$headers[x]}"><br>-->
+					{if $headers[x] eq "ID_CONTROL" or $headers[x] eq "ID"}
+						<th offsetwidth="0" width="0" tipo="oculto" modificable="N" campoBD='{$valuesEncGrid[x]}'>{$headers[x]} </th>
+                    {elseif $anchos[x] eq 0}
+                    	<th width="0" offsetWidth="0" tipo="oculto">{$headers[x]} </th>
+                    {elseif $headers[x] eq "No de solicitud"}        
+                    	<th width="{$anchos[x]}" offsetWidth="{$anchos[x]}" tipo="entero" modificable="N" campoBD="{$valuesEncGrid[x]}">{$headers[x]} </th>	
+					{else}
+						<th width="{$anchos[x]}" offsetWidth="{$anchos[x]}" tipo="texto" modificable="N" campoBD="{$valuesEncGrid[x]}">{$headers[x]} </th>	
+					{/if}	
+				{/section}			
+				
+				
+				
+				
+				{if $mpe neq '0' && $t neq 'YWRfZmFjdHVyYXNfYXVkaWNlbA==' && $t neq 'YWRfbm90YXNfY3JlZGl0bw==' && $t neq 'Y2xfY29udHJhcmVjaWJvcw=='}
+                	<th width="70" offsetWidth="60" tipo="libre" valor="Modificar" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/modificar.png" border="0" onclick="abreMod(1,'#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Mod" title="Modificar Registro"/></th>
+				{/if}
+				
+                {if $vpe neq '0'}
+                	<th width="50" offsetWidth="60" tipo="libre" valor="Ver" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/ver.png" border="0"  onclick="abreMod(2,'#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Ver" title="Ver Registro"/></th>
+                {/if}
+				
+                {if $epe neq '0' && $t neq 'bmFfY3VlbnRhc19wb3JfcGFnYXI=' && $t neq 'bmFfZWdyZXNvcw=='  && $t neq 'YWRfZmFjdHVyYXM='&& $t neq 'YWRfZmFjdHVyYXNfYXVkaWNlbA==' && $t neq 'YWRfbm90YXNfY3JlZGl0bw=='&& $t neq 'Y2xfY29udHJhcmVjaWJvcw=='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Eliminar" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/eliminar.png" border="0" onclick="abreMod(3,'#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Eliminar" title="Eliminar Registro"/></th>
+                {/if}
+				{if $t eq 'YWRfcGVkaWRvcw=='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimePedido('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'YWRfbW92aW1pZW50b3NfYWxtYWNlbg=='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimePedido('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'YWRfc29saWNpdHVkZXNfbWF0ZXJpYWw='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimeContrarecibos('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'Y2xfY29udHJhcmVjaWJvcw=='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimeDoc('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'bmFfZWdyZXNvc19jYWphX2NoaWNh'}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimeEgresoCajaL('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'YWRfb3JkZW5lc19jb21wcmFfcHJvZHVjdG9z&stm='}
+               		<th width="60" offsetWidth="60" tipo="libre" valor="Imprimir" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimeOrdenCompra('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imprimir" title="Imprimir Registro"/></th>
+                {/if}
+				{if $t eq 'bmFfZWdyZXNvcw==' || $t eq 'bmFfY3VlbnRhc19wb3JfcGFnYXI=' || $t eq 'YWRfcGVkaWRvcw=='|| $t eq 'YWRfc29saWNpdHVkZXNfbWF0ZXJpYWw=' || $t eq 'bmFfaW5ncmVzb3NfY2FqYV9jaGljYQ=='}
+						<th width="60" offsetWidth="60" tipo="libre" valor="Cancelar" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/cancelar_icono.png" border="0" onclick="cancelaRegistro('{$t}','#');" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Cncelar" title="Cancelar"/></th>
+				{/if}
+				
+				
+                
+                 <!-- TABLA: de facturas y n otas de credito {$t}-->
+                {if $t eq 'YWRfbm90YXNfY3JlZGl0bw=='}
+                	<th width="50" offsetWidth="60" tipo="libre" valor="Cancelar " align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/cancelar22.gif" border="0" onclick="abreMod(3,'#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Cancelar" title="Cancelar Registro"/></th>
+                {/if}
+                {if $t eq 'YWRfZmFjdHVyYXM=' or $t eq 'YWRfZmFjdHVyYXNfYXVkaWNlbA==' or $t eq 'YWRfbm90YXNfY3JlZGl0bw=='}
+                	<th width="50" offsetWidth="70" tipo="libre" valor="Impr." align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/print.gif" border="0" onclick="imprimeDoc('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="Imp" title="Imprimir"/></th>
+                {/if}
+                
+{if $t eq 'YWRfZmFjdHVyYXNfYXVkaWNlbA==' or $t eq 'YWRfbm90YXNfY3JlZGl0bw=='}
+                	<th width="50" offsetWidth="70" tipo="libre" valor="XML" align="center" campoBD='{$valuesEncGrid[x]}'><img src="{$rooturl}imagenes/general/xml.gif" border="0" onclick="xmlDoc('#')" onmouseover="this.style.cursor='hand';this.style.cursor='pointer';" alt="XML" title="Imprimir"/></th>
+                {/if}
+      
+            </tr>                        
+       </table>
+       </div><!--fin del div borde_redondo_grid-->
+       </div>
+
+	  <script>	  	
+	  	CargaGrid('listado');
+      </script>
+      </td>
+    </tr>
+</table>
+<br />
+
+
+</div>
+
+{literal}
+<script>
+$(document).ready(function() {
+		var tabla = $("#t").val();
+		if(tabla == "bmFfY29zdGVvX3Byb2R1Y3Rvcw=="){
+				$("#bot-tablaup").css("display", "none");
+				}
+		});
+	
+	function abreMod(val, campo)
+	{
+		var objP1=document.getElementById("cadP1");
+		var cadP1=objP1.value;
+		var objP2=document.getElementById("cadP2");		
+		var cadP2=objP2.value;
+		var rooturl=document.getElementById("rooturl").value;
+		var t=document.getElementById("t").value;
+		var id=celdaValorXY('listado',0,campo);
+		var stm=document.getElementById("stm").value;
+		
+		
+		//var res=ajaxR(rooturl+'code/ajax/verificaPermisos.php?tabla='+t+'&id='+id+'&accion='+val);
+		var auxA;
+		var resAB;
+		//alert(res);
+				
+		
+		/*if(res != 'si')
+		{
+			alert('No es posible eliminar el registro, ya est� relacionado a otros m�dulos.');
+			return false;
+		}*/
+		if(val == 1)
+		{	
+			//MODIFICAR
+			if(t == 'bmFfbW92aW1pZW50b3NfYWxtYWNlbg==')
+			{		
+				var estatus=celdaValorXY('listado',6,campo);
+				if(estatus==1)
+				{
+					alert("El movimiento no puede ser modificado.");
+					return false;
+				}
+				else if(estatus==2)
+				{
+					alert("El movimiento no puede ser modificado, esta pendiente por autorizar por parte de Direcci�n.");
+					return false;
+				}
+			}
+			
+			else if(t == 'YWRfcGVkaWRvcw=='){		
+					var modifica = verificaModPedido(id);
+						if(modifica == 0){
+								alert("No puedes modificar un pedido\ntranscurrido un dia de la fecha de alta");
+								return false;
+								}
+					}
+					
+			else if(t == 'YWRfb3JkZW5lc19jb21wcmFfcHJvZHVjdG9z'){
+					var modifica = verificaModOrden(id);
+						if(modifica == 0){
+								alert("No puedes modificar una orden de compra\ncuando ya tiene una entrada de almacen");
+								return false;
+								}
+					}
+			
+			else if(t == 'YWRfY29zdGVvX3Byb2R1Y3Rvcw=='){
+					var idCosteo = celdaValorXY('listado',0,campo);
+					var ruta = "verificaModificarCosteo.php";
+					var envio = "id=" + idCosteo;
+					var respuesta = ajaxN(ruta, envio);
+					if(respuesta == 1){
+							alert("Costeo marcado como no modificable");
+							return false;
+							}
+					}
+					
+			else if(t == 'bmFfdGlwb3NfaW5ncmVzb19jYWphX2NoaWNh'){
+					var idIngreso=celdaValorXY('listado',0,campo);
+					var ruta = "verificaModificar.php";
+					var envio = "id=" + idIngreso + "&caso=1";
+					var respuesta = ajaxN(ruta, envio);
+					if(respuesta == 0){
+							alert("No puedes modificar estos registros");
+							return false;
+							}
+					}
+			else if(t == 'bmFfdGlwb3NfZWdyZXNvX2NhamFfY2hpY2E='){
+					var idegreso=celdaValorXY('listado',0,campo);
+					var ruta = "verificaModificar.php";
+					var envio = "id=" + idegreso + "&caso=2";
+					var respuesta = ajaxN(ruta, envio);
+					if(respuesta == 0){
+							alert("\u2655 No puedes modificar estos registros \u0BF5");
+							return false;
+							}
+					}
+			else if(t == 'bmFfaW5ncmVzb3NfY2FqYV9jaGljYQ=='){
+					var idingreso=celdaValorXY('listado',0,campo);
+					var envio = "id=" + idingreso;
+					var ruta = "verificaModificarIngresos.php";
+					var respuesta = ajaxN(ruta, envio);
+					if(respuesta == 0){
+							alert("No puedes modificar ingresos confirmados");
+							return false;
+							}
+					
+					}
+			
+			
+			{/literal}	
+				
+			
+			
+			{if $t neq 'cmFjX3NvbGljaXR1ZGVzX2Rlc2N1ZW50bw==' and $t neq 'cmFjX3NvbGljaXR1ZGVzX2xpYmVyYWNpb25fYXJ0aWN1bG9zX2VuX3BlZGlkbw==' and $t neq 'cmFjX21vdmltaWVudG9zX2FsbWFjZW4'}			
+				location.href="../general/encabezados.php?t={$t}&k="+id+"&op=2&v=0&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+			{else} 
+				{if $t eq 'cmFjX3NvbGljaXR1ZGVzX2Rlc2N1ZW50bw=='}
+					location.href="../especiales/aprobacionSubtotal.php?t={$t}&k="+id+"&op=2&v=0&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+				{else if $t eq 'cmFjX3NvbGljaXR1ZGVzX2xpYmVyYWNpb25fYXJ0aWN1bG9zX2VuX3BlZGlkbw=='}
+					location.href="../especiales/aprobacionArticulosOtrosPedidos.php?t={$t}&k="+id+"&op=2&v=0&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+				{/if}
+			{/if}
+			
+			{literal}
+		}
+		else if(val == 2 )
+		{
+			//VER
+			{/literal}
+
+			{if $t neq 'cmFjX3NvbGljaXR1ZGVzX2Rlc2N1ZW50bw==' and $t neq 'cmFjX3NvbGljaXR1ZGVzX2xpYmVyYWNpb25fYXJ0aWN1bG9zX2VuX3BlZGlkbw=='}			
+				location.href="../general/encabezados.php?t={$t}&k="+id+"&op=2&v=1&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+			{else} 
+				{if $t eq 'cmFjX3NvbGljaXR1ZGVzX2Rlc2N1ZW50bw=='}
+					location.href="../especiales/aprobacionSubtotal.php?t={$t}&k="+id+"&op=2&v=1&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+				{else if $t eq 'cmFjX3NvbGljaXR1ZGVzX2xpYmVyYWNpb25fYXJ0aWN1bG9zX2VuX3BlZGlkbw=='}
+					location.href="../especiales/aprobacionArticulosOtrosPedidos.php?t={$t}&k="+id+"&op=2&v=1&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2;
+				{/if}
+			{/if}
+			
+			{literal}
+		}
+		else if( val ==3)
+		{
+				
+			if(t == 'YWRfb3JkZW5lc19jb21wcmFfcHJvZHVjdG9z'){
+			var modifica = verificaModOrden(id);
+					if(modifica == 0){
+							alert("No puedes eliminar una orden de compra\ndespues de entregados los productos");
+							return false;
+							}
+					}
+			
+			
+			if(t == 'bmFfbW92aW1pZW50b3NfYWxtYWNlbg==')
+			{		
+				var estatus=celdaValorXY('listado',6,campo);
+				if(estatus==1)
+				{
+					alert("El movimiento no puede ser eliminado.");
+					return false;
+				}
+				else if(estatus==2)
+				{
+					alert("El movimiento no puede ser eliminado, esta pendiente por autorizar por parte de Direcci�n.");
+					return false;
+				}
+			}
+			else if(t == 'YWRfZmFjdHVyYXNfYXVkaWNlbA==' || t == 'YWRfZmFjdHVyYXM='){		
+								//CANCELACION DE LAS  FACTURAS
+								//------------------------
+									//facturas
+								aux = "cancelaDocumento.php"
+								datos = "tabla="+t+"&opcion=1&paso=1&id_documento="+id;
+								
+								var res = ajaxN(aux,datos);
+						
+								var arrResp = res.split("|");
+								if(arrResp[0].indexOf("exito") < 0){
+									alert(arrResp[1]);
+									return false;
+								}
+								else if(arrResp[0].indexOf("exito") >= 0){
+									if (!confirm(String.fromCharCode(191) + "Est\u00E1 seguro de cancelar la factura: "+arrResp[1]+" ?")){
+										return false;
+									}else{
+								   
+										//mandamos alert si desea cancancelar la factura
+										aux = "../ajax/cancelaDocumento.php?tabla="+t+"&opcion=1&paso=2&id_documento="+id;
+										
+										//alert(aux);
+										var res2=ajaxR(aux);
+										
+									
+										arrResp=res2.split("|");
+										if(arrResp[0].indexOf('exito')<0){
+											alert(arrResp[1]);
+											return false;
+										}
+										else{
+											alert('La factura: '+arrResp[2]+' fue cancelada con \u00e9xito.');
+											location.href = "listados.php?t=YWRfZmFjdHVyYXM=";
+										}
+									}
+								}
+							}
+			else
+			{
+			
+				var ruta = "verificaEliminar.php";
+				var envio_datos = 'tabla=' + t + '&id=' + id;
+				var respuestaEliminar = ajaxN(ruta, envio_datos);
+					
+					
+				if(respuestaEliminar == "SI"){
+			
+						{/literal}						
+						location.href="../general/encabezados.php?t={$t}&k="+id+"&op=3&v=1&tabla={$tabla}&cadP1="+cadP1+"&cadP2="+cadP2+"&stm="+stm;
+						{literal}
+						
+						}
+				else
+						alert(respuestaEliminar);
+		
+			}
+		
+		}else if(val == 4 && t == 'c3BhX3ZhbG9yYWNpb25fbWVkaWNh'){
+			window.location.href ="../especiales/valoracionMedica.php?accion=0&soloVer=1&idCliente=" + id;	
+		}else if(val == 5 && t == 'c3BhX3ZhbG9yYWNpb25fbWVkaWNh'){
+			window.location.href ="../especiales/valoracionMedica.php?accion=0&soloVer=0&idCliente=" + id;	
+		}	
+	}	
+	
+	function abreArchivo(tipo,pos,opcion)
+	{
+		var id=celdaValorXY('listado',0,pos);
+		var resp=ajaxR("../ajax/catalogos/general.php?opcion="+opcion+"&id="+id);
+		var arrResp=resp.split("|");
+		if(arrResp[0]!="exito")
+		{
+			//alert(resp);
+			return false;
+		}
+		if(arrResp[1]!=1)
+		{
+			alert("El archivo requerido ya no se encuentra disponible en el servidor.");
+			return false;
+		}
+		location.href="../especiales/abrirArchivo.php?tipo="+tipo+"&id="+id;
+	}
+		
+	function imprimeDoc(val, tabla)
+	{
+		var tabla=document.forma_filtro.t.value;
+		if(tabla == 'c3BhX25vdGFzX3Byb2R1Y3Rvcw=='){
+			window.open('../contratos/imprimibles/nota.php?tipo=3&id_nota='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");
+		}else if(tabla == 'c3BhX25vdGFzX3NlcnZpY2lvcw=='){
+			window.open('../contratos/imprimibles/nota.php?tipo=1&id_nota='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");
+		}else if (tabla == 'b2Zfc29saWNpdHVkZXNfZnJhbnF1aWNpYXM='){			
+			var id_solicitud = celdaValorXY('listado', 0, val);
+			//window.location.href = '../contratos/solicitud/solicitud_franquicia.php?id_solicitud='+id_solicitud, '_blank';
+			window.open('../contratos/solicitud/solicitud_franquicia.php?id_solicitud='+id_solicitud, '_blank', "width=1024, height=768");		
+		}
+		else if(tabla == 'YWRfZmFjdHVyYXM=')
+		{//impresion de facturas
+
+			window.open('../pdf/imprimeFactura_audicel.php?Factura=SI&tabla=ad_facturas&impDoc=1&doc='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");		
+		}
+		else if(tabla == 'YWRfZmFjdHVyYXNfYXVkaWNlbA==')
+		{//impresion de facturas
+			window.open('../pdf/imprimeFactura_audicel_recibida.php?Factura=SI&tabla=ad_facturas_audicel&impDoc=1&doc='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");		
+		}
+		else if(tabla == 'YWRfbm90YXNfY3JlZGl0bw==')			
+		{//impresion de notas de credito
+			window.open('../pdf/imprimeDoc.php?NC=SI&impDoc=1&doc='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");		
+		}
+		else if(tabla == 'Y2xfY29udHJhcmVjaWJvcw==')			
+		{//impresion de contrarecibo
+			window.open('../pdf/imprimeContrarecibo.php?contrarecibo='+celdaValorXY('listado', 0, val), "Contrarecibo", "width=800, height=600");		
+		}
+		else
+		{
+		/*	var tabla=document.forma_filtro.t.value;
+			if(tabla == 'YW5kZXJwX2ZhY3R1cmFz')
+				window.open('../pdf/imprimeDoc.php?Factura=SI&impDoc=1&doc='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");		
+			else			
+				window.open('../pdf/imprimeDoc.php?NC=SI&impDoc=1&doc='+celdaValorXY('listado', 0, val), "Doc", "width=800, height=600");		*/
+		}
+		//tablas de facturas y notas de credito
+	}
+	
+	function muestraXMLPDF(caso, xml){
+			var pos = $(xml).parent().attr("id");
+			if(caso == 1)
+					var columna = 11;
+			if(caso == 2)
+					var columna = 12;
+			var pos_real = pos.split("listado_" + columna + "_");
+			var idCXP = $("#listado_0_" + pos_real[1]).attr("valor");
+			window.open("../ajax/descargaXMLPDFcxp.php?cxp=" + idCXP + "&caso=" + caso, "Cuenta por Pagar", "width=200, height=100");
+			}
+			
+	function xmlDoc(val)
+	{
+		//para facturas y notas de credito
+		var tabla=document.forma_filtro.t.value;
+		if(tabla=='YWRfZmFjdHVyYXM=')
+			window.open("../ajax/veFactura.php?tabla="+tabla+"&fact=" + celdaValorXY('listado', 0, val), "", "");
+		else if(tabla == 'YWRfZmFjdHVyYXNfYXVkaWNlbA==')
+			window.open("../ajax/veFactura.php?tabla="+tabla+"&fact=" + celdaValorXY('listado', 0, val), "", "");
+		else if(tabla == 'ZmVsZWNfcmVjaWJvc19ub21pbmE=')
+			window.open("../ajax/verNominaXml.php?idNom=" + celdaValorXY('listado', 0, val), "", "")
+			
+		else	
+			window.open("../ajax/veNC.php?fact=" + celdaValorXY('listado', 0, val), "", "");
+	}		
+	
+	function teclaEnter(eve, tabla, campo, operador, valor, extra,url,tcr, fd, fa,stm)
+	{
+		var key=0;	
+		key=(eve.which) ? eve.which : eve.keyCode;	
+		if(key == 13)
+		{
+			filtro(tabla, campo, operador, valor, extra,url,tcr, fd, fa,stm);
+		}
+	}
+	
+	function nosubmit()
+	{		
+		return false;
+	}
+	
+	function imprimePedido(pos){
+		var pedido = celdaValorXY('listado', 0, pos);
+		window.open('../../code/pdf/imprimePedido.php?pedido=' + pedido, "Pedido", "width=1000, height=1000");		
+		}
+	function imprimeSolicitudMaterial(pos){
+		var pedido = celdaValorXY('listado', 0, pos);
+		window.open('../../code/pdf/imprimeSolicitudMaterial.php?pedido=' + pedido, "Pedido", "width=1000, height=1000");		
+	}
+	function imprimeContrarecibos(pos){
+		var contrarecibo = celdaValorXY('listado', 0, pos);
+		window.open('../../code/pdf/imprimeContrarecibo.php?contrarecibo=' + contrarecibo, "Contrarecibo", "width=1000, height=1000");		
+	}
+	function imprimeEgresoCajaL(pos){
+		var caja = celdaValorXY('listado', 0, pos);
+		window.open('../../code/pdf/imprimeEgresoCaja.php?cajaEgreso=' + caja, "Caja Chica", "width=1000, height=1000");		
+		}	
+	function cancelaRegistro(tabla, pos){
+			var id = celdaValorXY('listado',0,pos);
+			var ruta = "verificaCancelaciones.php";
+			var envio = "id=" + id + "&tabla=" +  tabla;
+			var respuesta = ajaxN(ruta, envio);
+			var datos = JSON.parse(respuesta);
+			if(datos.cancela == 1){
+					if(confirm(datos.texto)){
+							var ruta = "cancelaCuentas.php";
+							var envio = "id=" + id + "&tabla=" +  tabla;
+							var confirmado = ajaxN(ruta, envio);
+							if(confirmado == "exito"){
+									alert("Operaci\u00f3n Realizada con \u00c9xito");
+									location.reload();
+									}
+							else{
+									alert("Fall\u00f3 la cancelaci\u00f3n");
+									}
+							
+							}
+					
+					}
+			else{
+					alert(datos.texto);
+					}
+			
+			}
+	
+</script>
+{/literal}
+
+{include file="_footer.tpl" aktUser=$username}

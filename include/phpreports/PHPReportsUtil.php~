@@ -1,0 +1,381 @@
+<?php
+	/******************************************************************************
+	*																										*
+	*	Useful functions and classes to deal with PHPReports stuff.						*
+	*	This file is part of the standard PHPReports package.								*
+	*																										*
+	******************************************************************************/	
+
+	/******************************************************************************
+	*																										*
+	*	This function will return if there is a PHPReports path in the PHP			*
+	*	ini_get("include_path").																	*
+	*																										*
+	******************************************************************************/
+	function getPHPReportsIncludePath(){
+// esta primera linea hay que agregarla para que el reporteador sepa la ruta exacta de phpreports
+// sobre todo ahorita que est&aacute; en servidor rem&oacute;to C:\ServidorWeb_S&W\newart\include\phpreports
+		//ini_set("include_path","C:/xampp/htdocs/prefacturador/include/phpreports"); 
+		
+		//produccion /var/www/vhosts/sysandweb.com/ci
+		//ini_set("include_path","/var/www/html/redaudinet_test/include/phpreports");
+		
+		
+		ini_set("include_path","/var/www/html/redaudinetdistribuidor/include/phpreports");
+		
+		
+		
+		//ini_set("include_path", "C:/xampp/htdocs/mandarin_spa/include/phpreports");
+	 
+	 
+		
+		$aPaths = explode((stristr(PHP_OS,"WIN")?";":":"),ini_get("include_path"));
+		foreach($aPaths as $sPath)
+			if(stristr($sPath,"phpreports"))
+				return $sPath;
+		return null;
+	}
+
+	/******************************************************************************
+	*																										*
+	*	Returns the temporary file path. It's up to your operational system to		*
+	*	return that. In most cases, on Linux it will return /tmp and on				*
+	*	Windows c:\temp																				*
+	*																										*
+	******************************************************************************/
+	function getPHPReportsTmpPath(){
+		$sPath = tempnam(null,"check");
+		unlink($sPath);
+		return realpath(dirname($sPath));
+	}
+
+	/******************************************************************************
+	*																										*
+	*	This function will return the file path where the PHPReports classes			*
+	*	are.																								* 
+	*																										*
+	******************************************************************************/
+	function getPHPReportsFilePath(){
+		$sPath = getPHPReportsIncludePath();
+		if(!is_null($sPath))
+			return $sPath;
+		// put your distro path here
+		//return "/www/facturacion/include/phpreports/";
+		
+		//prod ini_set("include_path","/var/www/vhosts/systhebooks.net/httpdocs/mandarin_spaDev/include/phpreports");
+		  return "/var/www/html/redaudinetdistribuidor/include/phpreports";
+		//local
+		//return "/var/www/vhosts/casaibarra/include/phpreports/";
+		 
+	}
+
+	/******************************************************************************
+	*																										*
+	*	XSLTProcessorClass																			*
+	*	This class is used as base for XSLT process.											*
+	*																										*
+	******************************************************************************/	
+	class XSLTProcessorClass{
+		var $_sXML;
+		var $_sXSLT;
+		var $_sOutput;
+		var $_aParms;
+
+		/**
+			Constructor
+		*/
+		function XSLTProcessorClass(){
+			$this->_sXML	=null;
+			$this->_sXSLT	=null;
+			$this->_sOutput=null;
+			$this->_aParms	=null;
+		}
+
+		/**
+			Sets the XML data file path
+		*/			
+		function setXML($sXML_=null){
+			$this->_sXML=$sXML_;
+		}
+		
+		/**
+			Returns the XML data file path
+		*/
+		function getXML(){
+			return $this->_sXML;
+		}
+		
+		/**
+			Sets the style sheet file path
+		*/
+		function setXSLT($sXSLT_=null){
+			$this->_sXSLT=$sXSLT_;
+		}
+
+		/**
+			Returns the style sheet file path
+		*/
+		function getXSLT(){
+			return $this->_sXSLT;
+		}
+		
+		/**
+			Specify the output file path
+			A null just returns the result on the run method
+		*/
+		function setOutput($sOutput_=null){
+			$this->_sOutput=$sOutput_;
+		}
+
+		/**
+			Return the output file path
+		*/		
+		function getOutput(){
+			return $this->_sOutput;
+		}
+
+		/**
+			Specify the parameters array
+		*/
+		function setParms($aParms_=null){
+			if(is_null($aParms_))
+				return;
+			if(!is_array($aParms_))
+				return;	
+			$this->_aParms=$aParms_;	
+		}
+		
+		/**
+			Insert a parameter
+			sParm_ - parameter name
+			oVal_  - parameter value
+		*/			
+		function setParm($sParm_=null,$oVal_=null){
+			if(is_null($sParm_))
+				return;
+			$this->_aParms[$sParm_]=$oVal_;
+		}
+
+		/**
+			Returns a parameter value
+			sParm_ - parameter name
+		*/
+		function getParm($sParm_){
+			if(!array_key_exists($sParm_))
+				return null;
+			return $this->_aParms[$sParm_];
+		}
+		
+		/**
+			Remove a parameter
+			sParm_ - parameter name
+		*/
+		function removeParm($sParm_=null){
+			if(is_null($sParm_))
+				return;
+			if(!array_key_exists($sParm_,$this->_aParms))
+				return;					
+			unset($this->_aParms[$sParm_]);					
+		}
+
+		/**
+			This method MUST be overwritten on every subclass to reflect
+			the behaviour of the desired XSLT processor.
+			It MUST return the result, and if defined an output, save it.
+		*/
+		function run(){
+		}
+	}
+	
+	/******************************************************************************
+	*																										*
+	*	Sablotron processor																			*
+	*	http://www.gingerall.com/charlie/ga/xml/p_sab.xml									*
+	*	http://www.php.net/manual/en/ref.xslt.php												*
+	*	Used on PHP4 or installed from the PECL modules.									*
+	*																										*
+	******************************************************************************/
+	class Sablotron_xp extends XSLTProcessorClass{
+		function run(){
+			if(is_null($this->_sXML)){
+				print "ERROR: no XML file specified";
+				return;
+			}
+			if(is_null($this->_sXSLT)){
+				print "ERROR: no XSLT file specified";
+				return;
+			}
+			$oXSLT = xslt_create();
+			xslt_set_encoding($oXSLT, 'ISO-8859-1');
+			$sRst	 = xslt_process($oXSLT,$this->_sXML,$this->_sXSLT,$this->_sOutput,null,$this->_aParms);
+			xslt_free($oXSLT);					
+			return $sRst;
+		}
+	}
+
+	/******************************************************************************
+	*																										*
+	*	PHP5 XSL processing																			*
+	*	Uses libxslt																					*
+	*	http://www.php.net/manual/en/ref.xsl.php												*
+	*																										*
+	******************************************************************************/
+	class PHPXSL_xp extends XSLTProcessorClass{
+		function run(){
+			// xml document
+			$oXML = new DomDocument('1.0','ISO-8859-1');
+			$oXML->load($this->_sXML);
+			$oXML->xinclude();
+
+			// xslt document
+			$oXSL = new DomDocument('1.0','ISO-8859-1');
+			$oXSL->load($this->_sXSLT);
+
+			// xslt processor
+			$oProc = new XSLTProcessor();
+			$oProc->importStyleSheet($oXSL);
+			
+			// set all the parameters
+			if(!is_null($this->_aParms)){
+				foreach($this->_aParms as $k => $v){
+					$oProc->setParameter("",$k,$v);
+				}
+			}	
+
+			// make the transformation				
+			$sRst = $oProc->transformToXML($oXML);
+			unset($oProc);
+			unset($oXSL);
+			unset($oXML);
+
+			// if output is not null, save the result there
+			if(!is_null($this->_sOutput)){
+				$fHand = @fopen($this->_sOutput,"w");
+				@fputs($fHand,$sRst);
+				@fclose($fHand);
+			}
+			return $sRst;
+		}
+	}
+	
+	/******************************************************************************
+	*																										*
+	*	XSLT Processor factory																		*
+	*	Returns a XSLT processor based on the current environment						*
+	*	or the user choice (need to hack the code below).									*
+	*																										*
+	******************************************************************************/
+	class XSLTProcessorFactory{
+		function get(){
+			// PHP major version number
+			$iVer = intval(substr(phpversion(),0,1));
+
+			// if PHP4 and Sablotron is installed
+			if($iVer<=4 && function_exists("xslt_create"))
+				return new Sablotron_xp();
+			// if PHP5 and Sablotron is installed				
+			else if($iVer>=5 && function_exists("xslt_create"))
+				return new Sablotron_xp();	
+			// if PHP5, Sablotron is not installed	and XSL support is compiled			
+			else if($iVer>=5 && !function_exists("xslt_create") && class_exists("XSLTProcessor"))
+				return new PHPXSL_xp();
+			// there is no XSLT processor installed!				
+			else
+				return null;				
+		}
+	}
+
+	/******************************************************************************
+	*																										*
+	*	PHPReportsError																				*
+	*	Process error messages																		*
+	*																										*
+	******************************************************************************/
+	class PHPReportsError{
+		function PHPReportsError($sMsg_=null,$sURL_=null){
+			if(is_null($sMsg_))
+				return;
+				
+			print "<center><p style='width:400px;background-color:#F5F5F5;border-style:solid;border-width:2;border-color:#CCCCCC;padding:10px 10px 10px 10px;margin:20px;font-family:verdana,arial,helvetica,sans-serif;color:#505050;font-size:12px;'>";
+			print "<span style='font-size:15px;color:#CC0000;font-weight:bold;' align='center'>Faltan datos para el reporte.</span><br/><br/>";
+			print $sMsg_."<br/><br/>";
+			
+			if(!is_null($sURL_))
+				print "<a href='$sPath/help/$sURL_'>M&aacute;s acerca de este error aqu&iacute;.</a><br/><br/>";
+
+			print "<span style='font-size:10px;font-weight:bold;'>Mensaje generado por el manejador de reportes</span>";
+			print "</p><br><input type='button' value='  Cerrar  ' onclick='window.close();' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-style:normal; font-size:10px; font-weight:bold; background-color:#F0F0F0; color:#000000; border:1px solid #CCCCCC;'/></center>";
+			exit();				
+		}
+	}
+
+	class PHPReportsErrorTr {
+		var $_aMsgs;
+		
+		function PHPReportsErrorTr(){
+			$this->_aMsgs = Array();
+
+			$this->_aMsgs["OPS"]["default"]				= "Ocurri&oacute; un error.";
+			$this->_aMsgs["ERROR"]["default"]			= "Mensaje generado por el manejador de reportes.";
+			$this->_aMsgs["NODATA"]["default"]			= "No fueron encontrados los datos.";
+			$this->_aMsgs["NOPAGE"]["default"]			= "No existe el elemento PAGE en el archivo XML.";
+			$this->_aMsgs["NOIF"]["default"]			= "Interface de Base de datos '%s' no disponible.";
+			$this->_aMsgs["REFUSEDCON"]["default"]		= "Conexi&oacute;n rechazada.";
+			$this->_aMsgs["QUERYERROR"]["default"]		= "Hay un error en su consulta de SQL.";
+			$this->_aMsgs["NOCOLUMNS"]["default"]		= "Ning&uacute;n resultado devuelto.";
+			$this->_aMsgs["PAGEPARSER"]["default"]		= "Imposible copiar el parser al directorio temporal.";
+			$this->_aMsgs["DYNLINK"]["default"]			= "Liga dinamica especificada, pero no existe el elemento COLUMN.";
+			$this->_aMsgs["EXPLINK"]["default"]			= "Lida de expresion especificada, pero no existe el elemtno COLUMN.";
+			$this->_aMsgs["NOFIELD"]["default"]			= "Se est&aacute; tratando de obtener el criterio <b>VALUE</b> de un campo llamado <b>%s</b>, pero no est&aacute; en la consulta generada. Por favor verifique sus datos.";
+			$this->_aMsgs["NOFIELDSUM"]["default"]		= "Se est&aacute; tratando de obtener el criterio <b>SUM</b> de un campo llamado <b>%s</b>, pero no est&aacute; en la consulta generada. Por favor verifique sus datos.";
+			$this->_aMsgs["NOFIELDMAX"]["default"]		= "Se est&aacute; tratando de obtener el criterio <b>MAX VALUE</b> de un campo llamado <b>%s</b>, pero no est&aacute; en la consulta generada. Por favor verifique sus datos.";
+			$this->_aMsgs["NOFIELDMIN"]["default"]		= "Se est&aacute; tratando de obtener el criterio <b>MIN VALUE</b> de un campo llamado <b>%s</b>, pero no est&aacute; en la consulta generada. Por favor verifique sus datos.";
+			$this->_aMsgs["NOFIELDAVG"]["default"]		= "Se est&aacute; tratando de obtener el criterio <b>AVERAGE</b> de un campo llamado <b>%s</b>, pero no est&aacute; en la consulta generada. Por favor verifique sus datos.";
+			$this->_aMsgs["CANTWRITEPAGE"]["default"]	= "Imposible escribir el archivo <b>%s</b> al disco. Verifique el espacio/cuota en disco y sus derechos de administraci&oacute;n.";
+			$this->_aMsgs["DYNBOOK"]["default"]			= "Marcador din&aacute;mico especificado, pero elemento COLUMN no encontrado";
+			$this->_aMsgs["EXPBOOK"]["default"]			= "Marcador de expresi&oacute;n especificado, pero elemento COLUMN no encontrado";
+			$this->_aMsgs["NOXMLTRANS"]["default"]		= "Parametro COL de <b>%s</b> no encontrado en la traducci&oacute;n del archivo XML.";
+			$this->_aMsgs["NOXSLT"]["default"]			= "Procesador XSLT no disponible. Verifique si ha compilado su archivo PHP con <b>--enable-xslt</b> y la biblioteca <a href=\"http://www.gingerall.com/charlie/ga/xml/p_sab.xml\">Sablotron</a> (para <a href=\"http://www.php.net/manual/en/ref.xslt.php\">PHP4</a>) o con <b>--enable-xsl</b> (para <a href=\"http://www.php.net/manual/en/ref.xsl.php\">PHP5</a>).";
+			$this->_aMsgs["NOPATH"]["default"]			= "Parece que no se ha especificado la ruta de PHPReports en la sentencia <b>include_path</b> PHP o <b>php.ini</b>. No se puede saber donde est&aacute;n las clases.";
+			$this->_aMsgs["NOCODE"]["default"]			= "Imposible crear el c&oacute;digo de salida para ejecutar el reporte. Por favor verifique si el usuario de webserver tiene derechos de escritura en el directorio <b>%s</b>.";
+			$this->_aMsgs["NOXML"]["default"]			= "Imposible localizar el archivo XML con sus datos (<b>%s</b>) para ejecutar el reporte. Por favor verifique el nombre de archivo y si su usuario tiene derechos de escritura en el directorio temporal.";
+			$this->_aMsgs["NOXMLSET"]["default"]		= "El archivo de entrada XML <b>%s</b> no fue encontrado.";
+			$this->_aMsgs["NOXSLTSET"]["default"]		= "El archivo de entrada XSLT <b>%s</b> no fue encontrado.";
+			$this->_aMsgs["NOPLUGIN"]["default"]		= "No existe <b>%s</b> plugin de salida (<b>%s</b>).";
+			$this->_aMsgs["NOLOAD"]["default"]			= "Impsible encontrar el archivo <b>%s</b> para carga de reporte.";
+			$this->_aMsgs["NOTEMPLATE"]["default"]		= "La plantilla <b>%s</b> no fue encontrada.";
+		}
+
+		function showMsg($sMsg_=null,$oParms_=null){
+			if(!sMsg_)
+				return;
+			if($_SESSION["phpReportsLanguage"])
+				$sLang = $_SESSION["phpReportsLanguage"];
+			else
+				$sLang = $GLOBALS["phpReportsLanguage"];
+			if(!$sLang)
+				$sLang = "default";
+
+			$sTitle	= $this->_aMsgs["OPS"][$sLang];
+			$sError	= $this->_aMsgs["ERROR"][$sLang];
+			$sMsg		= $this->_aMsgs[$sMsg_][$sLang];
+
+			// if the message have no translation
+			if(!$sMsg)
+				$sMsg = $this->_aMsgs[$sMsg_]["default"];
+			// if the message is still null ...
+			if(!$sMsg)
+				$sMsg = "$sMsg_?";
+			
+			if($oParms_)
+				$sMsg = vsprintf($sMsg,$oParms_);
+			
+			print "<center><p style='width:400px;background-color:#F5F5F5;border-style:solid;border-width:2;border-color:#CCCCCC;padding:10px 10px 10px 10px;margin:20px;font-family:verdana,arial,helvetica,sans-serif;color:#505050;font-size:12px;'>";
+			print "<span style='font-size:18px;color:#FF0000;font-weight:bold;'>$sTitle</span><br/><br/>";
+			print "$sMsg<br/><br/>";
+			print "<span style='font-size:10px;font-weight:bold;'>$sError</span>";
+			print "</p><br><input type='button' value='  Cerrar  ' onclick='window.close();' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-style:normal; font-size:10px; font-weight:bold; background-color:#F0F0F0; color:#000000; border:1px solid #CCCCCC;'/></center>";
+			exit();				
+		}
+	}
+?>

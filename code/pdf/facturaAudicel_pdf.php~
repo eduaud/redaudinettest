@@ -1,0 +1,220 @@
+<?php
+
+class PDF extends FPDF{
+	function Header(){
+			Global $accion;
+			Global $sucursal;
+			Global $folio;
+			Global $fecha_pedido;
+			Global $cuenta;
+			Global $metodo_pago;
+			
+			Global $logo;
+			Global $foliocfdi;
+			Global $certificado;
+			Global $lugar_fecha_certificacion;
+			Global $cliente;
+			Global $direccion_1;
+			Global $direccion_2;
+			Global $direccion_3;
+			Global $direccion_1_c;
+			Global $direccion_2_c;
+			Global $direccion_3_c;
+			Global $rfc_r;
+			Global $serie;
+			Global $folio_fiscal;
+			Global $regimen;
+			Global $compania;
+			Global $rfc_compania;
+			
+			$this -> SetLineWidth(0.4);
+			$this -> SetDrawColor(24,207,157);
+			$this -> SetFillColor(24,207,157);
+			$this -> SetTextColor(0);
+			$this -> SetFont('Arial','B',11);
+			$this -> Cell(130,5,$compania,0,0,'L',0);
+			$this -> SetFont('Arial','B',7);
+			$this -> Cell(65,5,"FACTURA",'LRT',1,'C',1);
+			$this -> Cell(130,5,utf8_decode($direccion_1_c.' '.$direccion_2_c.' '.$direccion_3_c),0,0,'L',0);
+			$this -> Cell(32.5,5,"Serie: ".$serie,'LBR',0,'C',0);
+			$this -> Cell(32.5,5,"Folio: ".$folio_fiscal,'LBR',1,'C',0);
+			$this -> Cell(130,5,$rfc_compania,0,0,'L',0);
+			$this -> Cell(65,5,utf8_decode("Lugar y Fecha de certificación"),'LR',1,'C',0);
+			$this -> Cell(130,5,$regimen,0,0,'L',0);
+			$this -> Cell(65,5,$lugar_fecha_certificacion,'LBR',1,'C',0);
+			$this -> Cell(130);
+			$this -> Cell(65,5,utf8_decode("Lugar y Fecha de emisión"),'LR',1,'C',0);
+			$this -> Cell(130,5,'','B',0,0,0);
+			$this -> Cell(65,5,$lugar_fecha_certificacion,'LBR',1,'C',0);
+			$this -> SetFont('Arial','B',11);
+			$this -> Cell(195,5,$cliente,0,1,'L',0);
+			$this -> SetFont('Arial','B',7);
+			$this -> Cell(195,5,$direccion_1.' '.$direccion_2,0,1,'L',0);
+			$this -> Cell(195,5,$direccion_3,0,1,'L',0);
+			$this -> Cell(195,5,'RFC: '.$rfc_r,0,1,'L',0);
+			$this -> Cell(97.5,5,utf8_decode('MÉTODO DE PAGO: '.$metodo_pago),0,0,'LT',0);
+			$this -> Cell(97.5,5,utf8_decode('NÚMERO CUENTA PAGO: '.$cuenta),0,1,'LT',0);
+			$this -> Cell(65,5,utf8_decode('Folio Fiscal'),'LBTR',0,'C',1);
+			$this -> Cell(65,5,utf8_decode('Número de Certificado del Emisor'),'RBT',0,'C',1);
+			$this -> Cell(65,5,utf8_decode('NÚMERO CERTIFICADO DEL SAT'),'RBT',1,'C',1);
+			$this -> Cell(65,5,$foliocfdi,'LBR',0,'C',0);
+			$this -> Cell(65,5,$certificado,'RB',0,'C',0);
+			$this -> Cell(65,5,'00001000000202809550','RB',1,'C',0);
+			$this -> Cell(195,5,'',0,1,0,0);
+	}
+	function Footer(){
+		$this -> SetY(260);
+		$this->Cell(0,5,utf8_decode('Este documento es una representación impresa de un CFDI'),0,0,'R');
+		$this -> SetY(265);
+		$this->SetFont('Arial','I',8);
+		$this->Cell(0,5,utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'C');
+	}
+	function footerGeneral(){
+		$this -> SetY(180);
+		Global $certificado_digital;
+		Global $sello;
+		Global $cadena_original;
+		Global $total;
+		Global $subtotal;
+		Global $iva;
+		Global $img_qr;
+		Global $moneda;
+		
+		$this -> SetLineWidth(0.4);
+		$this -> SetDrawColor(24,207,157);
+		$this -> SetFillColor(24,207,157);
+		$this -> SetTextColor(0);
+		$this -> SetFont('Arial','B',7);
+		
+		$this -> Cell(195,5,'IMPORTE EN LETRAS',1,1,'L',1);
+		$this -> SetTextColor(0);
+		//die('x:'.$total);
+		if($moneda == '1')
+			$letra = num2texto(str_replace(',','',$total),'PESOS', 'PESO');
+		else
+			$letra = num2texto(str_replace(',','',$total),'DOLARES', 'DOLAR');
+		$this -> Cell(195,5,$letra,1,1,'L',0);
+		$this -> SetTextColor(0);
+		$this -> Cell(195,5,'SELLO DIGITAL DEL EMISOR',1,1,'L',1);
+		$this -> SetTextColor(0);
+		$this -> MultiCell(195,4,$certificado_digital,1,1,'L',0);
+		$this -> SetTextColor(0);
+		$this -> Cell(195,5,'SELLO DIGITAL DEL SAT',1,1,'L',1);
+		$this -> SetTextColor(0);
+		$this -> MultiCell(195,4,$sello,1,1,'L',0);
+		$this -> SetTextColor(0);
+		$this -> Cell(195,5,'CADENA ORIGINAL DEL COMPLEMENTO DE CERTIFICACION DIGITAL DEL SAT',1,1,'L',1);
+		$this -> SetTextColor(0);
+		$this -> MultiCell(195,4,$cadena_original,1,1,'L',0);
+		$this -> SetTextColor(0);
+		$this -> Cell(195,3,'',0,1,'L',0);
+		$this->Image($img_qr,10,$this -> GetY(),30);
+		$this -> Cell(130);
+		$this -> Cell(35,5,'SUB-TOTAL',1,0,'L',1);
+		$this -> SetTextColor(0);
+		$this -> Cell(30,5,'$ '.$subtotal,1,1,'R',0);
+		$this -> Cell(130);
+		$this -> SetTextColor(0);
+		$this -> Cell(35,5,'IVA',1,0,'L',1);
+		$this -> SetTextColor(0);
+		$this -> Cell(30,5,'$ '.$iva,1,1,'R',0);
+		$this -> Cell(130);
+		$this -> SetTextColor(0);
+		$this -> Cell(35,5,'TOTAL',1,0,'L',1);
+		$this -> SetTextColor(0);
+		$this -> Cell(30,5,'$ '.$total,1,1,'R',0);
+		$this -> Cell(130);
+	}		
+	function cabeceraTabla(){
+			$this -> SetLineWidth(0.4);
+			$this -> SetDrawColor(24,207,157);
+			$this -> SetFillColor(24,207,157);
+			$this -> SetTextColor(0);
+			$this->SetFont('Arial','B',7);
+			
+			$this->Cell(20,10, 'CANT./UNIDAD',1,0,'C',1);
+			$this->Cell(119,10, utf8_decode('CONCEPTO'),'TBR',0,'C',1);
+			$this->Cell(25,10, 'P UNITARIO','TBR',0,'C',1);
+			$this->Cell(31,10, 'IMPORTE','TBR',1,'C',1);
+		}
+	function datosProductos($producto){
+					
+					$this -> SetLineWidth(0.4);
+					$this -> SetDrawColor(24,207,157);
+					$this -> cabeceraTabla();
+					$this->SetFillColor(24,207,157);
+					$inicialY = $this-> GetY();
+					$this->SetXY(10, $inicialY);
+					
+					foreach($producto as $datos){
+							$this->SetFont('Arial','',6); 
+							if($inicialY > 170){	
+								$Yfinal = $this-> GetY();
+								if($Yfinal > 170)
+									$dibuja = 175;
+								else
+									$dibuja = 175;
+								$resto = $dibuja - $Yfinal;
+								//die("X".$resto);
+								$this -> SetLineWidth(0.4);
+								$this -> SetDrawColor(24,207,157);
+								
+								$this->Cell(20,$resto, '','LBR',0,'L');
+								$this->Cell(119,$resto, '','LBR',0,'L');
+								$this->Cell(26,$resto, '','LBR',0,'L');
+								$this->Cell(30,$resto, '','LBR',1,'L');
+								
+								$this->AddPage();
+								$this -> SetLineWidth(0.4);
+								$this -> SetDrawColor(24,207,157);
+								$this -> cabeceraTabla();
+								$inicialY = 84.00125; 
+							}
+							$this -> SetTextColor(0);
+							$this->SetFont('Arial','',6);
+							$this->SetXY(10, $inicialY);
+							$this->Cell(20,5, $datos -> cantidad .' '.$datos -> unidad,'LR',0,'C');
+							
+							$this->SetXY(30,$inicialY);
+							$this->MultiCell(119,5,$datos -> nombre .': '. $datos -> contratos,'R','C');
+							
+							$this->SetXY(117,$inicialY);
+							
+
+							$this->SetXY(150, $inicialY);
+							$this->Cell(25,5, $datos -> valor_unitario,'R',0,'C');
+							
+							$this->SetXY(175, $inicialY);
+							$this->Cell(30,5, $datos -> importe,'R',1,'C');
+							
+							$actualY = $this-> GetY();  //Obtenemos el valor de Y despues de la multicelda ya que este tendra el valor donde iniciara la siguiente fila
+							$nuevaY = $actualY - $inicialY; // Hacemos la convercion para obtener la suma de la siugiente posicion
+							$inicialY +=  $nuevaY;		// Le asignamos a Y inicial el nuevo valor de la siguiente fila
+							
+							}
+					$Yfinal = $this-> GetY();
+					if($Yfinal >= 170)
+						$dibuja = 175;
+					else
+						$dibuja = 175;
+					
+					$resto = $dibuja - $Yfinal;
+					$this->Cell(20,$resto, '','LBR',0,'L');
+					$this->Cell(119,$resto, '','LBR',0,'L');
+					$this->Cell(26,$resto, '','LBR',0,'L');
+					$this->Cell(30,$resto, '','LBR',0,'L');
+					if($Yfinal >= 170){
+						$this -> cabeceraTabla();	
+					}
+					
+					}
+}
+die($nombre_archivoPDF);
+$pdf = new PDF('P', 'mm', 'Letter');
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf -> datosProductos($datosProducto);
+$pdf -> footerGeneral();
+if(!$caso)
+	$pdf->Output();
+?>

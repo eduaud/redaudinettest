@@ -1,0 +1,151 @@
+/* CSS Tabs jQuery */
+.contenedor_tab{
+	float:left;
+	clear:both;
+	width:940px;
+	padding:0px;
+	margin:0 auto;
+	margin-top:-40px;
+	display:block;
+	background:#ccc;	
+	/*border:1px solid #333;*/
+	-moz-border-radius: 0px 7px 7px 7px;;
+	-webkit-border-radius: 0px 7px 0px 0px;
+	border-radius: 0px 7px 7px 7px;
+}
+
+ul.tabs{
+	/*background-color:#ccc;*/
+	float:right;
+	margin:0;
+	padding:0;
+	list-style:none;
+	height:43px;
+	width:940px;
+	margin-top:-7px;
+	margin-bottom:10px;
+}
+ul.tabs li{
+	float:left;
+	margin-right:: 50px;
+	margin:0;
+	padding:0;
+	height:31px;
+	line-height:31px;
+	margin-bottom:-1px;background:#333;
+	overflow:hidden;
+	position:relative;
+	border:1px solid #333;
+	-moz-border-radius:7px 7px 0 0;
+	-webkit-border-radius:7px 7px 0 0;
+	border-radius: 7px 7px 0 0;
+}
+
+/*ul.tabs li a{
+	text-decoration:none;
+	color:#FFF;
+	display:block;
+	font-size:12px;	
+	padding:0 20px;	
+	outline:none;
+	-moz-border-radius:7px 7px 0 0;
+	-webkit-border-radius:7px 7px 0 0;
+	border-radius: 7px 7px 0 0;
+}
+*/
+ul.tabs li p{
+	text-decoration:none;
+	color:#FFF;
+	display:block;
+	font-size:12px;
+	/*font-weight:bold;*/
+	padding:0 20px;
+	/*border:1px solid #fff;*/
+	outline:none;
+	-moz-border-radius:7px 7px 0 0;
+	-webkit-border-radius:7px 7px 0 0;
+	border-radius: 7px 7px 0 0;
+}
+
+ul.tabs li a:hover{
+	/*background:#666;*/
+}
+
+ul.tabs li.activa,ul.tabs li.activa p,ul.tabs li.activa p:hover {
+	color:#333;
+	font-weight:bold;
+	background:#ccc;
+	border-bottom:1px solid #ccc;
+}
+.contenido_tab{
+	padding:10px;
+	font-size:12px;
+	width:940px;
+}
+.contenido_tab img{
+	margin:0 20px 20px 0;
+	border:1px solid #ddd;
+	padding:5px
+}
+
+
+.ccmbtxt {    
+    width: 300px; 
+	height: 20px;    
+    margin: 0;    
+    
+    border-left-color: black;
+    border-left-style: solid;
+    border-left-width: 1px;
+    
+    border-top-color: black;
+    border-top-style: solid;
+    border-top-width: 1px;
+    
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+        
+    /*border-style: none;    */
+}
+
+.ccmbbtn {
+   
+    top: -1px;
+    font-size: 0.5em;
+    margin: -6px;
+    padding: 5px;
+    height:20px;
+    width:20px;
+    
+    background-color: transparent;
+    
+   	border-right-color: black;
+    border-right-style: solid;
+    border-right-width: 1px;
+    
+    border-top-color: black;
+    border-top-style: solid;
+    border-top-width: 1px;
+    
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+        
+    /*border-style: none;*/
+}
+
+* html .ui-autocomplete {
+	height: 10em;
+}
+	
+.ui-autocomplete {
+	max-height: 10em;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+	width: 18.5em;
+	font-size: 0.4em;
+}

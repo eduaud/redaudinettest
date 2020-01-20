@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<REPORT MARGINWIDTH="1" MARGINHEIGHT="1" TITLE="inventario">
+	<TITLE>Movimientos de Almacen</TITLE>
+	<BACKGROUND_COLOR>#FFFFFF</BACKGROUND_COLOR>
+	
+	<CSS MEDIA="screen">../../css/reportesPantalla.css</CSS>
+	<CSS MEDIA="print">../../css/reportesPantalla.css</CSS>
+	
+	<NO_DATA_MSG>No se encontraron datos que cumplan los criterios, intente nuevamente. Verifique el estado del documento antes de mandar a impresión.</NO_DATA_MSG>
+
+	<DOCUMENT>
+		<FOOTER>
+			<ROW>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="CELDAGRANTOTAL" TEXTCLASS="BOLD" COLSPAN="21" WIDTH="750">"NÚMERO TOTAL DE REGISTROS: ".$this->getRowCount()</COL>
+			</ROW>
+		</FOOTER>
+	</DOCUMENT>
+
+	<PAGE BORDER="0" SIZE="6666666666" CELLSPACING="1" CELLPADDING="1" ALIGN="CENTER">
+		<HEADER>
+			<ROW>
+				<COL CELLCLASS="HEADER" COLSPAN="21" WIDTH="750">
+					<XHTML>
+						<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="1" WIDTH="100%">
+							<TR>
+								<TD ROWSPAN="2" CLASS="HEADER" style="background:#FFFFFF; font-size:10px" ALIGN="CENTER" WIDTH="40%">
+									<IMG SRC="../../imagenes/sitio_base/tip_logo.png"/><BR/>
+									<b>Rent And Company</b>
+								</TD>
+								<TD CLASS="HEADER" WIDTH="60%" ALIGN="CENTER">									
+									<b><U>Movimientos de Almacen</U></b>																		
+								</TD>
+							</TR>
+						</TABLE>
+					</XHTML>
+				</COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="LEFT" COLSPAN="21" WIDTH="750" TYPE="EXPRESSION" CELLCLASS="HEADER">"Filtro utilizado: ".$this->getParameter("filtro")</COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="LEFT" COLSPAN="21" WIDTH="750" TYPE="EXPRESSION" CELLCLASS="HEADER">" ".$this->getParameter("rango_fechas")</COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="RIGHT" COLSPAN="21" WIDTH="700" TYPE="EXPRESSION" CELLCLASS="HEADER">insert_date()</COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="CENTER" CELLCLASS="ESPACIO" TYPE="EXPRESSION" COLSPAN="21" HEIGHT="10" WIDTH="750"></COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="LEFT" HEIGHT="15" COLSPAN="21" WIDTH="750">
+					<XHTML>
+						<BUTTON style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; font-weight:bolder; background-color:#FFFFFF; color:#094932; border:1px solid #094932;' onClick="window.print();" class="botonImprimir">IMPRIMIR</BUTTON>
+					</XHTML>
+				</COL>
+			</ROW>
+			<ROW>
+				<COL ALIGN="CENTER" CELLCLASS="ESPACIO" TYPE="EXPRESSION" COLSPAN="21" HEIGHT="10" WIDTH="750">""</COL>
+			</ROW>					
+			<ROW>
+				<COL ALIGN="CENTER" CELLCLASS="ESPACIO" TYPE="EXPRESSION" COLSPAN="21" HEIGHT="10" WIDTH="750">""</COL>
+			</ROW>
+		</HEADER>
+		
+		<FOOTER>			
+			<ROW>
+				<COL ALIGN="CENTER" COLSPAN="21" TYPE="EXPRESSION" CELLCLASS="NUMPAG">"Página ".$this->getPageNum()</COL>
+			</ROW>		
+		</FOOTER>
+	</PAGE>
+
+	<GROUPS>		
+		<GROUP NAME="groupSuc" EXPRESSION="almacen_nombre" >
+				<HEADER>
+				 	
+				<ROW>					
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="400" >"ALMACEN"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="200" >"TIPO MOVIMIENTO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="400" >"SUBTIPO MOVIMIENTO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="150" >"ID MOVIMIENTO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="400" >"CÓDIGO ARTICULO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="400" >"ARTICULO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="150" >"CANTIDAD"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="200" >"FECHA MOVIMIENTO"</COL>
+				<COL TYPE="EXPRESSION" ALIGN="LEFT" CELLCLASS="SUBHEADEREVEN" TEXTCLASS="BOLD" WIDTH="200" >"HORA MOVIMIENTO"</COL>
+				</ROW>	
+				</HEADER>
+				
+				<FOOTER>			
+					<ROW>	
+						<COL TYPE="EXPRESSION" ALIGN="RIGHT" CELLCLASSEVEN="EVEN" COLSPAN="16" CELLCLASSODD="ODD" >" "</COL>
+					</ROW>
+				</FOOTER>				
+				
+				<GROUP NAME="almacen_nombre" EXPRESSION="almacen_nombre">
+					<HEADER>
+		
+					</HEADER>
+					
+					
+					<FIELDS>
+					<ROW>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >almacen_nombre</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >tipo_movimiento</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >subtipo</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >id_control_movimiento</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >codigo_articulo</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >nombre_articulo</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >cantidad</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >fecha_movimiento</COL>
+					<COL TYPE="FIELD" ALIGN="LEFT" CELLCLASSEVEN="EVEN" CELLCLASSODD="ODD" >hora_movimiento</COL>
+					</ROW>
+				</FIELDS>
+
+					
+				</GROUP>
+				
+			
+								
+		</GROUP>
+	</GROUPS>
+<!-- Aquí va el tipo de documento -->
+</REPORT>

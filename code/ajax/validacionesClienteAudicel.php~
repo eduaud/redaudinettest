@@ -1,0 +1,57 @@
+<?php	
+
+include("../../conect.php");
+include("../../consultaBase.php");
+include("../../code/general/funciones.php");
+extract($_GET);
+extract($_POST);
+$condicion="";
+switch($caso){
+	case '1':
+		//caso para colocar la clave del distribuidor asociado AUDICEL
+		$sql="SELECT clave
+			FROM ad_clientes WHERE id_cliente=".$id_cliente;
+		$datos = new consultarTabla($sql);
+		$result = $datos-> obtenerArregloRegistros();
+		echo $result[0][0];
+	break;
+	case '2':
+		if($valor!=''){
+			if(base64_decode($tabla)=='ad_clientes'){
+					if($modulo=='75000'||$modulo=='75004'||$modulo=='75003')
+						$condicion=' AND id_tipo_cliente_proveedor NOT IN(1,5,8)';
+					if($modulo=='75001'||$modulo=='75008')
+						$condicion=' AND id_tipo_cliente_proveedor NOT IN(2,14)';
+					if($modulo=='75002'||$modulo=='75009')
+						$condicion=' AND id_tipo_cliente_proveedor NOT IN(3,15)';
+					
+			}
+			if($accion=='insertar'){
+				$sql="SELECT ".$campoValidar." FROM ".base64_decode($tabla)." WHERE ".$campoValidar."='".$valor."' AND activo=1 ".$condicion;
+				$datos = new consultarTabla($sql);
+				$result = $datos-> obtenerArregloRegistros();
+				if(count($result)>0)
+					echo 'error';
+				else 
+					echo 'exito';
+			}elseif($accion=='modificar'){
+				echo $sql="SELECT ".$campoValidar." FROM ".base64_decode($tabla)." WHERE ".$campoValidar."='".$valor."' AND activo=1 ".$condicion;
+				$datos = new consultarTabla($sql);
+				$result = $datos-> obtenerArregloRegistros();
+				if(count($result)>0)
+					echo 'error';
+				else 
+					echo 'exito';
+			}
+		}
+		else
+			echo 'vacio';
+	break;
+	case '3':
+		$sql="SELECT di FROM ad_sucursales WHERE id_sucursal=".$id_plaza;
+		$datos = new consultarTabla($sql);
+		$result = $datos-> obtenerArregloRegistros();
+		echo $result[0][0];
+	break;
+}
+?>

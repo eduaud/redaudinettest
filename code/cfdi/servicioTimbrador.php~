@@ -1,0 +1,36 @@
+<?php
+	require_once('../../include/nusoap/nusoap.php');
+	$respuesta='';
+	$usr = "usrTP9zdbsuhd";
+	$psw = "pswPmn0bSPwGW";
+	$tkn = 'tokWSvHrvKSip';
+	$cta = 'cta6yr4ZSQymc';
+
+	$str_xml = mb_convert_encoding($str_xml,"ISO-8859-1","UTF-8");
+	die($str_xml);
+	$aParametros = array('cad' =>$str_xml,'tk' => $tkn,'user' => $usr,'pass' => $psw,'cuenta' => $cta);
+	
+	$wsdl = "http://test01.cfdinova.com.mx/axis2/services/TimbradorIntegradores?wsdl";
+
+	$client = new nusoap_client($wsdl, true);
+
+
+	$resultado = $client->call('get', $aParametros);
+
+
+
+	if ($client ->fault){ // si
+		$respuesta = 'fallo';
+	}else{
+		$error = $client -> getError();
+		if ($error){ // Hubo algun error
+			$respuesta = 'error';
+			$errores = $client -> faultstring;
+		}
+		else{
+			$respuesta = 'exito';
+		}
+	}
+	//die('</pre>'.print_r($resultado).'</pre>');
+	unset($client);
+?>

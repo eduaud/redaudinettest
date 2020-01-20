@@ -1,0 +1,13 @@
+#menuprin {
+	float: left;
+	width: 1018px;
+	text-align: center;
+	background-color: #BFC0BA;
+	border: medium solid #FFFFFF;
+}
+#menuprin img {
+	margin-top: 20px;
+	margin-right: 13px;
+	margin-bottom: 20px;
+	margin-left: 13px;
+}
