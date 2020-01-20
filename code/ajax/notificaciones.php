@@ -129,7 +129,7 @@ function enviar_notificacion($nombre_emisor, $correos_destino, $nombre_destinata
 		else { $body .= '<p>Le informamos que tiene migraciones por facturar.</p>'; }
 		
 		$link = '<a href="'.$ruta_base_red.'code/especiales/migracionesFacturacion.php" target="_blank">
-					201.99.107.11/redaudinetdistribuidor
+					201.99.107.11/redaudinettest
 				</a>';
 	} elseif($opcion == 9){   // ***   Arqueo Distribuidores   *** //
 		if($asunto != ""){ $subject = $asunto; }
@@ -139,7 +139,7 @@ function enviar_notificacion($nombre_emisor, $correos_destino, $nombre_destinata
 		else { $body .= '<p>Le informamos que se realizo un arqueo de distribuidores.</p>'; }
 		
 		$link = '<a href="'.$ruta_base_red.'code/especiales/apruebaCheques.php" target="_blank">
-					201.99.107.11/redaudinetdistribuidor
+					201.99.107.11/redaudinettest
 				</a>';
 	} elseif($opcion == 10){   // ***   Aprobar o Rechazar cheques (arqueo)   *** //
 		if($asunto != ""){ $subject = $asunto; }
@@ -159,7 +159,7 @@ function enviar_notificacion($nombre_emisor, $correos_destino, $nombre_destinata
 		else { $body .= '<p>Le informamos que se han liberado comisiones para facturar.</p>'; }
 		
 		$link = '<a href="'.$ruta_base_red.'code/especiales/liberaciones/comisionesPendientesFacturar.php" target="_blank">
-					201.99.107.11/redaudinetdistribuidor
+					201.99.107.11/redaudinettest
 				</a>';
 	} elseif($opcion == 12){   // ***   Asignacion de Pipeline   *** //
 		if($asunto != ""){ $subject = $asunto; }
@@ -181,7 +181,7 @@ function enviar_notificacion($nombre_emisor, $correos_destino, $nombre_destinata
 		else { $body .= '<p>Le informamos que se han liberado penalizaciones.</p>'; }
 		
 		$link = '<a href="'.$ruta_base_red.'/code/especiales/liberaciones/liberaPenalizacionPorPlaza.php" target="_blank">
-					201.99.107.11/redaudinetdistribuidor
+					201.99.107.11/redaudinettest
 				</a>';
 	} elseif($opcion == 14){   // ***   Liberacion de Bonos   *** //
 		if($asunto != ""){ $subject = $asunto; }
@@ -191,7 +191,7 @@ function enviar_notificacion($nombre_emisor, $correos_destino, $nombre_destinata
 		else { $body .= '<p>Le informamos que se han liberado bonos para facturar.</p>'; }
 		
 		$link = '<a href="'.$ruta_base_red.'code/especiales/liberaciones/bonosPendientesFacturar.php" target="_blank">
-					201.99.107.11/redaudinetdistribuidor
+					201.99.107.11/redaudinettest
 				</a>';
 	} else {
 		$subject = $asunto;

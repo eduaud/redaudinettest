@@ -226,7 +226,7 @@ function doSello($tipo_documento, $llave, $id_compania,$tabla)
 		//B:\xampp\htdocs\systemthebook\operadora\cache
 		// "/var/www/vhosts/sysandweb.com/facelec/cache/"
 		///var/www/vhosts/systhebooks.net/httpdocs/systemthebookTEST/operadora/
-		$sello = sello($cadenaOriginal, $ruta_llave_privada_key, $password, '/var/www/html/redaudinetdistribuidor/cache/');	
+		$sello = sello($cadenaOriginal, $ruta_llave_privada_key, $password, '/var/www/html/redaudinettest/cache/');	
 		//echo $sello;		
 		$cert=certificado($ruta_certificado);
 		$nombreFile="";		
